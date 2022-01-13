@@ -22,6 +22,7 @@ Auth::routes([
     'reset' => false,//menghilangkakn fitur forgot
 ]);
 
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Route::group(['prefix' => 'admin', 'middleware' => [
@@ -35,7 +36,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //     Route::get('profile', function(){
 //         return 'halaman profile admin';
 //     });
-    
+
 // });
 
 // Route::group(['prefix' => 'pengguna', 'middleware' => [
@@ -49,7 +50,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //     Route::get('profile', function(){
 //         return 'halaman profile pengguna';
 //     });
-    
+
 // });
 
 // Route::group(['prefix' => 'pembelian', 'middleware' => [
@@ -63,14 +64,14 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //     Route::get('profile', function(){
 //         return 'halaman profile pembelian';
 //     });
-    
+
 // });
 
+Route::resource('buku', BukuController::class);
 Route::group(['prefix'=>'admin','middleware'=>['auth']], function(){
     Route::get('buku',function(){
         return view ('buku.index');
     })->middleware(['role:admin|pengguna']);
     Route::get('pengarang',function(){
         return view ('pengarang.index');
-})->middleware(['role:admin']);
-});
+})->middleware(['role:admin'])};

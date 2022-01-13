@@ -14,15 +14,27 @@ class ApiUserController extends Controller
      */
     public function index()
     {
-        $user = User::all();
+        $user = User::where('name', 'Sila Ramadina')
+        // ->where('nama', 'HXZf9U4avN')
+        ->get();
 
-        return response()->json([
-            'status' => true,
-            'code' => 200,
-            'message' => 'Berhasil',
-            'data' => $user,
-        ]);
+        if ($user->count() >=1 ) {
+            return response()->json([
+                'status' => true,
+                'code' => 200,
+                'message' => 'Berhasil',
+                'data' => $user,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 404,
+                'message' => 'Gagal'
+            ]);
+        }
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -42,7 +54,17 @@ class ApiUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User();
+        $user->name = $request->name;
+        $user->email =$request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Kategori Berhasil Dibuat',
+            'data' => $user,
+        ], 201);
     }
 
     /**
@@ -53,7 +75,21 @@ class ApiUserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+        if ($user){
+            return response()->json([
+                'status' => true,
+                'code' => 200,
+                'message' => 'Berhasil',
+                'data' => $user,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 404,
+                'message' => 'Gagal'
+            ]);
+        }
     }
 
     /**
@@ -76,7 +112,26 @@ class ApiUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+        if ($user){
+            $user = new User();
+            $user->name = $request->name;
+            $user->email =$request->email;
+            $user->password = bcrypt($request->password);
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Kategori Berhasil Dibuat',
+                'data' => $user,
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 404,
+                'message' => 'Gagal'
+            ]);
+        }
     }
 
     /**
@@ -87,6 +142,21 @@ class ApiUserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        if ($user){
+            $user->delete();
+            return response()->json([
+                'status' => true,
+                'code' => 200,
+                'message' => 'Berhasil',
+                'data' => $user,
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 404,
+                'message' => 'Gagal'
+            ], 404);
+        }
     }
 }
